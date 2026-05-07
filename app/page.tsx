@@ -6,11 +6,24 @@ export default function Home() {
   const [search, setSearch] = useState('')
   const router = useRouter()
 
+  const handleSearch = (term: string) => {
+    const lower = term.toLowerCase()
+    const levels = ['l3','l4','l5','l6','e3','e4','e5','sde1','sde2','sde3']
+    const locations = ['bangalore','hyderabad','noida','remote','mumbai','delhi']
+    
+    if (levels.includes(lower)) {
+      router.push(`/salaries?level=${term}`)
+    } else if (locations.includes(lower)) {
+      router.push(`/salaries?location=${term}`)
+    } else {
+      router.push(`/salaries?company=${term}`)
+    }
+  }
+
   return (
     <main style={{ fontFamily: "'DM Sans', sans-serif" }} className="min-h-screen bg-white text-gray-900">
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-      {/* Nav */}
       <nav className="px-8 py-5 flex items-center justify-between border-b border-gray-100">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm">C</div>
@@ -21,12 +34,9 @@ export default function Home() {
           <a href="/companies" className="hover:text-gray-900 transition-colors">Companies</a>
           <a href="/compare" className="hover:text-gray-900 transition-colors">Compare</a>
         </div>
-
       </nav>
 
-      {/* Hero */}
       <div className="max-w-5xl mx-auto px-8 pt-24 pb-20">
-        {/* Gradient blob */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-to-br from-violet-100 via-indigo-50 to-pink-50 rounded-full blur-3xl opacity-60 -z-10" />
 
         <div className="inline-flex items-center gap-2 bg-gradient-to-r from-violet-50 to-indigo-50 border border-violet-200 rounded-full px-4 py-2 text-xs font-semibold text-violet-700 mb-8">
@@ -45,17 +55,16 @@ export default function Home() {
           L4 at Google ≠ L4 at Amazon. Real compensation data structured by level — so you can actually compare, not just browse.
         </p>
 
-        {/* Search */}
         <div className="flex gap-3 max-w-2xl mb-6">
           <input
             className="flex-1 border-2 border-gray-200 rounded-2xl px-6 py-4 text-sm placeholder-gray-400 focus:outline-none focus:border-violet-400 transition-all shadow-sm"
             placeholder="Search company, role, or level..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && router.push(`/salaries?search=${search}`)}
+            onKeyDown={e => e.key === 'Enter' && handleSearch(search)}
           />
           <button
-            onClick={() => router.push(`/salaries?search=${search}`)}
+            onClick={() => handleSearch(search)}
             className="bg-gradient-to-r from-violet-500 to-indigo-600 text-white px-8 py-4 rounded-2xl text-sm font-bold hover:opacity-90 transition-opacity shadow-lg shadow-violet-200"
           >
             Search
@@ -65,14 +74,13 @@ export default function Home() {
         <div className="flex gap-2 flex-wrap text-xs">
           <span className="text-gray-400">Try:</span>
           {['google', 'amazon', 'L4', 'Bangalore', 'meta'].map(tag => (
-            <button key={tag} onClick={() => router.push(`/salaries?search=${tag}`)}
+            <button key={tag} onClick={() => handleSearch(tag)}
               className="bg-gray-100 hover:bg-violet-50 hover:text-violet-700 hover:border-violet-200 border border-gray-200 px-3 py-1.5 rounded-full transition-all text-gray-600 font-medium">
               {tag}
             </button>
           ))}
         </div>
 
-        {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mt-16 max-w-2xl">
           {[
             { value: '20+', label: 'Verified entries', color: 'from-violet-500 to-indigo-500' },
@@ -86,7 +94,6 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Why levels matter */}
         <div className="mt-16 rounded-3xl overflow-hidden border-2 border-gray-100 shadow-sm">
           <div className="bg-gradient-to-r from-violet-500 to-indigo-600 px-8 py-4">
             <div className="text-white font-semibold text-sm">Why levels matter — not titles</div>
